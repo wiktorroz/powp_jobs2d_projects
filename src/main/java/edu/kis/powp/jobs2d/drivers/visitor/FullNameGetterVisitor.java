@@ -5,6 +5,7 @@ import edu.kis.powp.jobs2d.drivers.BoundsDriver;
 import edu.kis.powp.jobs2d.drivers.RealTimeDriver;
 import edu.kis.powp.jobs2d.drivers.RecordingDriver;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
+import edu.kis.powp.jobs2d.drivers.logger.LoggingExtensionDriver;
 import edu.kis.powp.jobs2d.drivers.logger.TrackingLoggerDriver;
 import edu.kis.powp.jobs2d.drivers.packet_composite.CompositeDriver;
 import edu.kis.powp.jobs2d.drivers.transformations.TransformingDriver;
@@ -30,6 +31,12 @@ public class FullNameGetterVisitor implements DriverVisitor {
     @Override
     public void visit(TrackingLoggerDriver driver) {
         builder.append(driver.toString());
+    }
+
+    @Override
+    public void visit(LoggingExtensionDriver driver) {
+        builder.append(driver.toString());
+        driver.getTarget().accept(this);
     }
 
     @Override
