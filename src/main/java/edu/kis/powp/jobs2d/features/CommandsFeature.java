@@ -1,6 +1,7 @@
 package edu.kis.powp.jobs2d.features;
 
 import edu.kis.powp.appbase.Application;
+import edu.kis.powp.jobs2d.command.history.AddCurrentCommandToHistoryObserver;
 import edu.kis.powp.jobs2d.command.history.CommandsHistory;
 import edu.kis.powp.jobs2d.command.io.CommandImporterFactory;
 import edu.kis.powp.jobs2d.command.io.JsonCommandImporterProvider;
@@ -32,9 +33,17 @@ public class CommandsFeature implements IFeature {
         CommandImporterFactory.registerProvider(new JsonCommandImporterProvider());
     }
 
+    private static final int COMMANDS_HISTORY_MAX_SIZE = 35;
+
     public static void setupCommandsHistory()
     {
-        commandsHistory = new CommandsHistory(35);
+        commandsHistory = new CommandsHistory(COMMANDS_HISTORY_MAX_SIZE);
+
+        AddCurrentCommandToHistoryObserver observer = new AddCurrentCommandToHistoryObserver(
+                commandsHistory.getHistory(),
+                commandsHistory.getMaxSize()
+        );
+        commandManager.getChangePublisher().addSubscriber(observer);
     }
 
     /**

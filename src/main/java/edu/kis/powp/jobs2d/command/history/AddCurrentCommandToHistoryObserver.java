@@ -8,11 +8,11 @@ import java.time.Instant;
 import java.util.List;
 
 
-public class CommandsHistoryObserver implements Subscriber {
+public class AddCurrentCommandToHistoryObserver implements Subscriber {
     private List<HistoryRecord> history;
     private Integer maxSize;
 
-    public CommandsHistoryObserver(List<HistoryRecord> history, Integer maxSize) {
+    public AddCurrentCommandToHistoryObserver(List<HistoryRecord> history, Integer maxSize) {
         this.history = history;
         this.maxSize = maxSize;
     }

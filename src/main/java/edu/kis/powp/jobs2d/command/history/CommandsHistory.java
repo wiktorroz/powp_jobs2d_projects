@@ -9,18 +9,12 @@ public class CommandsHistory {
     private final List<HistoryRecord> history = new ArrayList<>();
     private Integer maxSize = 50;
 
-    public CommandsHistory() {
-        CommandsHistoryObserver observer = new CommandsHistoryObserver(history, maxSize);
-
-        CommandsFeature
-                .getDriverCommandManager()
-                .getChangePublisher()
-                .addSubscriber(observer);
+    public CommandsHistory(int maxSize) {
+        this.maxSize = maxSize;
     }
 
-    public CommandsHistory(int maxSize) {
-        this();
-        this.maxSize = maxSize;
+    public CommandsHistory() {
+        this(50);
     }
 
     public void setMaxSize(int maxSize) {
