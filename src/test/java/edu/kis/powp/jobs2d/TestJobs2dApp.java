@@ -12,9 +12,7 @@ import edu.kis.powp.jobs2d.command.gui.CommandManagerWindowCommandChangeObserver
 import edu.kis.powp.jobs2d.drivers.BoundsDriver;
 import edu.kis.powp.jobs2d.command.manager.CommandPreviewChangeObserver;
 import edu.kis.powp.jobs2d.drivers.RealTimeDriver;
-import edu.kis.powp.jobs2d.drivers.RecordingDriver;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
-import edu.kis.powp.jobs2d.drivers.logger.TrackingLoggerDriver;
 import edu.kis.powp.jobs2d.drivers.packet_composite.CompositeDriver;
 import edu.kis.powp.jobs2d.drivers.transformations.*;
 import edu.kis.powp.jobs2d.drivers.visitor.FullNameGetterVisitor;
@@ -23,9 +21,6 @@ import edu.kis.powp.jobs2d.events.*;
 import edu.kis.powp.jobs2d.features.*;
 import edu.kis.powp.jobs2d.events.SelectLoadRecordedMacroOptionListener;
 import edu.kis.powp.jobs2d.events.SelectClearPanelOptionListener;
-import edu.kis.powp.jobs2d.events.SelectToggleRecordingOptionListener;
-import edu.kis.powp.jobs2d.events.SelectClearRecordingOptionListener;
-import edu.kis.powp.jobs2d.features.FeaturesManager;
 import edu.kis.powp.jobs2d.drivers.MouseClickToDriverCall;
 
 public class TestJobs2dApp {
@@ -74,22 +69,6 @@ public class TestJobs2dApp {
                 new SelectTransformCommandOptionListener(new FlipTransformer(false, true), "Flip Y"));
         application.addTest("FullNameGetter visitor test",
                 new SelectFullNameGetterVisitorTestListener(new FullNameGetterVisitor()));
-
-        RecordingDriver rec = RecordingFeature.getRecordingDriver();
-        boolean initial = rec.isRecordingEnabled();
-
-        application.addComponentMenuElementWithCheckBox(
-                DriverFeature.class,
-                "Recording",
-                new SelectToggleRecordingOptionListener(rec),
-                initial
-        );
-
-        application.addComponentMenuElement(
-                DriverFeature.class,
-                "Clear recording",
-                new SelectClearRecordingOptionListener()
-        );
     }
 
     /**
@@ -98,9 +77,6 @@ public class TestJobs2dApp {
      * @param application Application context.
      */
     private static void setupDrivers(Application application) {
-        VisitableDriver TrackingLoggerDriver = new TrackingLoggerDriver();
-        DriverFeature.addDriver("Tracking Logger driver", TrackingLoggerDriver);
-
         DrawPanelController drawerController = DrawerFeature.getDrawerController();
         VisitableDriver driver = new LineDriverAdapter(drawerController, LineFactory.getBasicLine(), "basic");
         DriverFeature.addDriver("Line Simulator", driver);
@@ -113,11 +89,6 @@ public class TestJobs2dApp {
         driver = new LineDriverAdapter(drawerController, LineFactory.getSpecialLine(), "special");
         DriverFeature.addDriver("Special line Simulator", driver);
         DriverFeature.updateDriverInfo();
-
-        CompositeDriver basicCompositeDriver = new CompositeDriver("Basic & Log Composite Driver");
-        basicCompositeDriver.addDriver(TrackingLoggerDriver);
-        basicCompositeDriver.addDriver(driver);
-        DriverFeature.addDriver(basicCompositeDriver.toString(), basicCompositeDriver);
 
         CoordinateTransformer scale = new ScaleTransformer(2.0, 2.0);
         VisitableDriver scaledDriver = new TransformingDriver(driver, scale, "Transform: Scaled 2x");
@@ -140,7 +111,7 @@ public class TestJobs2dApp {
 
         CompositeDriver chaosCompositeDriver = new CompositeDriver("Chaos Composite Driver");
         chaosCompositeDriver.addDriver(driver);
-        chaosCompositeDriver.addDriver(TrackingLoggerDriver);
+        chaosCompositeDriver.addDriver(rotatedDriver);
         chaosCompositeDriver.addDriver(scaledDownDriver);
         DriverFeature.addDriver(chaosCompositeDriver.toString(), chaosCompositeDriver);
       
@@ -210,6 +181,7 @@ public class TestJobs2dApp {
                 FeaturesManager.registerFeature(new CommandsFeature());
                 FeaturesManager.registerFeature(new DriverFeature());
                 FeaturesManager.registerFeature(new CanvasFeature());
+                FeaturesManager.registerFeature(new ExtensionsFeature());
 
                 // Automatycznie skonfiguruj wszystkie zarejestrowane funkcje
                 // To zastępuje ręczne wywołania setup dla każdej funkcji
@@ -217,6 +189,8 @@ public class TestJobs2dApp {
 
                 setupDrivers(app);
                 RecordingFeature.setup(DriverFeature.getDriverManager());
+                ExtensionsFeature.setupTrackingLoggerExtension();
+                ExtensionsFeature.setupRecordingExtension();
                 setupPresetTests(app);
                 setupCommandTests(app);
                 setupLogger(app);
