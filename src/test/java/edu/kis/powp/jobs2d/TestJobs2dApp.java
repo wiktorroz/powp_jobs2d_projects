@@ -162,6 +162,7 @@ public class TestJobs2dApp {
         CommandsFeature.getDriverCommandManager().getChangePublisher().addSubscriber(commandPreviewChangeObserver);
         CommandManagerWindowCommandChangeObserver windowObserver = new CommandManagerWindowCommandChangeObserver(commandManager);
         CommandsFeature.getDriverCommandManager().getChangePublisher().addSubscriber(windowObserver);
+        CanvasFeature.getChangePublisher().addSubscriber(commandPreviewChangeObserver);
     }
 
 
