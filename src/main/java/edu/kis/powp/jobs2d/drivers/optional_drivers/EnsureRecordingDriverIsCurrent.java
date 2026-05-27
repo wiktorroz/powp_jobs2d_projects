@@ -10,7 +10,6 @@ import edu.kis.powp.observer.Subscriber;
  * Instead of simple identity check, traverses the entire decorator chain
  * to find RecordingDriver — this prevents stack overflow when extensions
  * (e.g. LoggingExtensionDriver) are stacked on top of RecordingDriver.
- *
  * When a new driver is selected, RecordingDriver wraps it and is placed
  * at the top of the chain.
  */
