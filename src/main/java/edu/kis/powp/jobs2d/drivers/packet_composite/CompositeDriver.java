@@ -22,10 +22,10 @@ public class CompositeDriver implements VisitableDriver {
     }
 
     public void addDriver(VisitableDriver driver) {
-        if(drivers == null) {
+        if(driver == null) {
             throw new IllegalArgumentException("Drivers cannot be null");
         }
-        else if(drivers == this){
+        else if(driver == this){
             throw new IllegalArgumentException("Cannot add itself as a driver");
         }
         drivers.add(driver);
