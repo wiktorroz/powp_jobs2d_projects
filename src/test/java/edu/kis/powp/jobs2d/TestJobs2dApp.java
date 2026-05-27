@@ -171,34 +171,32 @@ public class TestJobs2dApp {
      * Launch the application.
      */
     public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                Application app = new Application("Jobs 2D");
+        EventQueue.invokeLater(() -> {
+            Application app = new Application("Jobs 2D");
 
-                // Przykład użycia automatycznego zarządzania funkcjami (features management)
-                // Zarejestruj funkcje, które mają być automatycznie skonfigurowane
-                FeaturesManager.registerFeature(new DrawerFeature());
-                FeaturesManager.registerFeature(new CommandsFeature());
-                FeaturesManager.registerFeature(new DriverFeature());
-                FeaturesManager.registerFeature(new CanvasFeature());
-                FeaturesManager.registerFeature(new ExtensionsFeature());
+            // Przykład użycia automatycznego zarządzania funkcjami (features management)
+            // Zarejestruj funkcje, które mają być automatycznie skonfigurowane
+            FeaturesManager.registerFeature(new DrawerFeature());
+            FeaturesManager.registerFeature(new CommandsFeature());
+            FeaturesManager.registerFeature(new DriverFeature());
+            FeaturesManager.registerFeature(new CanvasFeature());
+            FeaturesManager.registerFeature(new ExtensionsFeature());
 
-                // Automatycznie skonfiguruj wszystkie zarejestrowane funkcje
-                // To zastępuje ręczne wywołania setup dla każdej funkcji
-                FeaturesManager.setupAllFeatures(app);
+            // Automatycznie skonfiguruj wszystkie zarejestrowane funkcje
+            // To zastępuje ręczne wywołania setup dla każdej funkcji
+            FeaturesManager.setupAllFeatures(app);
 
-                setupDrivers(app);
-                RecordingFeature.setup(DriverFeature.getDriverManager());
-                ExtensionsFeature.setupTrackingLoggerExtension();
-                ExtensionsFeature.setupRecordingExtension();
-                setupPresetTests(app);
-                setupCommandTests(app);
-                setupLogger(app);
-                setupWindows(app);
-                setupMouseHandler(app);
+            setupDrivers(app);
+            RecordingFeature.setup(DriverFeature.getDriverManager());
+            ExtensionsFeature.setupTrackingLoggerExtension();
+            ExtensionsFeature.setupRecordingExtension();
+            setupPresetTests(app);
+            setupCommandTests(app);
+            setupLogger(app);
+            setupWindows(app);
+            setupMouseHandler(app);
 
-                app.setVisibility(true);
-            }
+            app.setVisibility(true);
         });
     }
 
