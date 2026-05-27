@@ -10,11 +10,13 @@ import edu.kis.powp.jobs2d.command.SetPositionCommand;
 import edu.kis.powp.jobs2d.drivers.visitor.DriverVisitor;
 import edu.kis.powp.jobs2d.drivers.visitor.VisitableDriver;
 
+//DecoratorDriver extends VisitableDriver and adds getTarget/setTarget contract
+
 /**
  * Decorator driver that records all calls as command objects.
  * Recording can be temporarily disabled (used during playback).
  */
-public class RecordingDriver implements VisitableDriver {
+public class RecordingDriver implements DecoratorDriver {
 
     private VisitableDriver target;
     private final List<DriverCommand> recorded = new ArrayList<>();

@@ -1,5 +1,6 @@
 package edu.kis.powp.jobs2d.drivers.logger;
 
+import edu.kis.powp.jobs2d.drivers.DecoratorDriver;
 import edu.kis.powp.jobs2d.drivers.visitor.DriverVisitor;
 import edu.kis.powp.jobs2d.drivers.visitor.VisitableDriver;
 
@@ -9,7 +10,7 @@ import java.util.logging.Logger;
  * Decorator driver that logs all operations and delegates to an inner driver.
  * Acts as an extension: it can be toggled independently of the selected driver.
  */
-public class LoggingExtensionDriver implements VisitableDriver {
+public class LoggingExtensionDriver implements DecoratorDriver {
 
     private final Logger logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
     private VisitableDriver target;
