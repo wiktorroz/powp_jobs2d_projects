@@ -69,6 +69,24 @@ public class TestJobs2dApp {
                 new SelectTransformCommandOptionListener(new FlipTransformer(false, true), "Flip Y"));
         application.addTest("FullNameGetter visitor test",
                 new SelectFullNameGetterVisitorTestListener(new FullNameGetterVisitor()));
+
+        application.addTest("Show commands history", new CommandsHistoryOptionListener());
+
+        RecordingDriver rec = RecordingFeature.getRecordingDriver();
+        boolean initial = rec.isRecordingEnabled();
+
+        application.addComponentMenuElementWithCheckBox(
+                DriverFeature.class,
+                "Recording",
+                new SelectToggleRecordingOptionListener(rec),
+                initial
+        );
+
+        application.addComponentMenuElement(
+                DriverFeature.class,
+                "Clear recording",
+                new SelectClearRecordingOptionListener()
+        );
     }
 
     /**
