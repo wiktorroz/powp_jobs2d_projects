@@ -1,6 +1,5 @@
 package edu.kis.powp.jobs2d.drivers.optional_drivers;
 
-import edu.kis.powp.jobs2d.drivers.visitor.DriverVisitor;
 import edu.kis.powp.jobs2d.drivers.visitor.VisitableDriver;
 
 import java.util.logging.Logger;
@@ -31,10 +30,5 @@ public class LoggingExtensionDriver extends AbstractDecoratorDriver {
     @Override
     public String toString() {
         return "Tracking Logger -> " + getTarget();
-    }
-
-    @Override
-    public void accept(DriverVisitor visitor) {
-        visitor.visit(this);
     }
 }

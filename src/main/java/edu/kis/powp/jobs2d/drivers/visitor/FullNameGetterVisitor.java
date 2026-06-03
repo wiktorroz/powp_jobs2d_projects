@@ -3,9 +3,8 @@ package edu.kis.powp.jobs2d.drivers.visitor;
 
 import edu.kis.powp.jobs2d.drivers.BoundsDriver;
 import edu.kis.powp.jobs2d.drivers.RealTimeDriver;
-import edu.kis.powp.jobs2d.drivers.optional_drivers.RecordingDriver;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
-import edu.kis.powp.jobs2d.drivers.optional_drivers.LoggingExtensionDriver;
+import edu.kis.powp.jobs2d.drivers.optional_drivers.AbstractDecoratorDriver;
 import edu.kis.powp.jobs2d.drivers.optional_drivers.TrackingLoggerDriver;
 import edu.kis.powp.jobs2d.drivers.packet_composite.CompositeDriver;
 import edu.kis.powp.jobs2d.drivers.transformations.TransformingDriver;
@@ -33,8 +32,13 @@ public class FullNameGetterVisitor implements DriverVisitor {
         builder.append(driver.toString());
     }
 
+    /**
+     * Handles all AbstractDecoratorDriver subclasses (LoggingExtensionDriver,
+     * RecordingDriver, and any future decorators) in one place.
+     * Appends the decorator's label and recurses into the wrapped driver.
+     */
     @Override
-    public void visit(LoggingExtensionDriver driver) {
+    public void visit(AbstractDecoratorDriver driver) {
         builder.append(driver.toString());
         driver.getTarget().accept(this);
     }
@@ -43,12 +47,6 @@ public class FullNameGetterVisitor implements DriverVisitor {
     public void visit(RealTimeDriver driver) {
         builder.append(driver.toString());
         driver.getInnerDriver().accept(this);
-    }
-
-    @Override
-    public void visit(RecordingDriver driver) {
-        builder.append(driver.toString());
-        driver.getTarget().accept(this);
     }
 
     @Override

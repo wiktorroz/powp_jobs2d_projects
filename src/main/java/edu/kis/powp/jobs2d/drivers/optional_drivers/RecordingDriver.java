@@ -7,7 +7,6 @@ import java.util.List;
 import edu.kis.powp.jobs2d.command.DriverCommand;
 import edu.kis.powp.jobs2d.command.OperateToCommand;
 import edu.kis.powp.jobs2d.command.SetPositionCommand;
-import edu.kis.powp.jobs2d.drivers.visitor.DriverVisitor;
 import edu.kis.powp.jobs2d.drivers.visitor.VisitableDriver;
 
 //DecoratorDriver extends VisitableDriver and adds getTarget/setTarget contract
@@ -65,10 +64,5 @@ public class RecordingDriver extends AbstractDecoratorDriver {
     @Override
     public synchronized String toString() {
         return "RecordingDriver -> " + getTarget();
-    }
-
-    @Override
-    public void accept(DriverVisitor visitor) {
-        visitor.visit(this);
     }
 }
