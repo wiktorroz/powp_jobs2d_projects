@@ -17,7 +17,6 @@ import java.util.function.Function;
  * Feature that provides optional extensions (add-ons) working independently
  * of the selected driver. Extensions are toggled via checkboxes in the
  * Extensions menu.
- *
  * Extensions form a decorator chain. Each extension can be enabled/disabled
  * independently — disabling removes it from the chain like a linked-list node
  * removal, connecting its predecessor directly to its successor.
