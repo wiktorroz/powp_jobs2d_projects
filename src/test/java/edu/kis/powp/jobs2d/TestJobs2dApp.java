@@ -131,17 +131,20 @@ public class TestJobs2dApp {
             
         DrawPanelController previewDrawPanelController = new DrawPanelController();
         VisitableDriver driver = new LineDriverAdapter(previewDrawPanelController, LineFactory.getBasicLine(), "basic");
+        VisitableDriver canvasDriver = new LineDriverAdapter(previewDrawPanelController, CanvasFeature.getGuidesLineType(), "Canvas Preview");
         CoordinateTransformer scaleDown = new ScaleTransformer(0.5, 0.5);
         VisitableDriver previewDriver = new TransformingDriver(driver, scaleDown, "previewDriver");
+        VisitableDriver previewCanvasDriver = new TransformingDriver(canvasDriver, scaleDown, "previewCanvasDriver");
         CommandManagerWindow commandManager = new CommandManagerWindow(CommandsFeature.getDriverCommandManager());
         
         application.addWindowComponent("Command Manager", commandManager);
         commandManager.initializePreviewPanel(previewDrawPanelController);
         
-        CommandPreviewChangeObserver commandPreviewChangeObserver = new CommandPreviewChangeObserver(previewDrawPanelController, previewDriver, CommandsFeature.getDriverCommandManager());
+        CommandPreviewChangeObserver commandPreviewChangeObserver = new CommandPreviewChangeObserver(previewDrawPanelController, previewDriver, previewCanvasDriver, CommandsFeature.getDriverCommandManager());
         CommandsFeature.getDriverCommandManager().getChangePublisher().addSubscriber(commandPreviewChangeObserver);
         CommandManagerWindowCommandChangeObserver windowObserver = new CommandManagerWindowCommandChangeObserver(commandManager);
         CommandsFeature.getDriverCommandManager().getChangePublisher().addSubscriber(windowObserver);
+        CanvasFeature.getChangePublisher().addSubscriber(commandPreviewChangeObserver);
     }
 
 
