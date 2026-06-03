@@ -13,9 +13,11 @@ public interface DriverVisitor {
     void visit(CompositeDriver driver);
     void visit(LineDriverAdapter adapter);
     void visit(TrackingLoggerDriver driver);
+    //TODO: PRZENIEŚĆ TO DO ABSTRAKCYJNEJ KLASY
     void visit(LoggingExtensionDriver driver);
     void visit(RealTimeDriver driver);
     void visit(RecordingDriver driver);
     void visit(TransformingDriver driver);
+    //TODO: DALEJ BEZ ZMIAN
     void visit(BoundsDriver driver);
 }

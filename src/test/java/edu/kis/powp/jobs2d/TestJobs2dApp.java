@@ -17,6 +17,7 @@ import edu.kis.powp.jobs2d.drivers.packet_composite.CompositeDriver;
 import edu.kis.powp.jobs2d.drivers.transformations.*;
 import edu.kis.powp.jobs2d.drivers.visitor.FullNameGetterVisitor;
 import edu.kis.powp.jobs2d.drivers.visitor.VisitableDriver;
+import edu.kis.powp.jobs2d.drivers.optional_drivers.LoggingExtensionDriver;
 import edu.kis.powp.jobs2d.events.*;
 import edu.kis.powp.jobs2d.features.*;
 import edu.kis.powp.jobs2d.events.SelectLoadRecordedMacroOptionListener;
@@ -188,7 +189,7 @@ public class TestJobs2dApp {
 
             setupDrivers(app);
             RecordingFeature.setup(DriverFeature.getDriverManager());
-            ExtensionsFeature.setupTrackingLoggerExtension();
+            ExtensionsFeature.addExtension("Tracking Logger", LoggingExtensionDriver::new);
             ExtensionsFeature.setupRecordingExtension();
             setupPresetTests(app);
             setupCommandTests(app);

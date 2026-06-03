@@ -2,13 +2,16 @@ package edu.kis.powp.jobs2d.features;
 
 import edu.kis.powp.appbase.Application;
 import edu.kis.powp.jobs2d.drivers.DriverChainUtils;
+import edu.kis.powp.jobs2d.drivers.optional_drivers.DecoratorDriver;
 import edu.kis.powp.jobs2d.drivers.optional_drivers.RecordingDriver;
-import edu.kis.powp.jobs2d.drivers.optional_drivers.LoggingExtensionDriver;
 import edu.kis.powp.jobs2d.drivers.visitor.VisitableDriver;
 import edu.kis.powp.jobs2d.events.SelectClearRecordingOptionListener;
 import edu.kis.powp.jobs2d.events.SelectToggleRecordingOptionListener;
 
 import java.awt.event.ActionEvent;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.function.Function;
 
 /**
  * Feature that provides optional extensions (add-ons) working independently
@@ -22,7 +25,7 @@ import java.awt.event.ActionEvent;
 public class ExtensionsFeature implements IFeature {
 
     private static Application app;
-    private static LoggingExtensionDriver loggingDriver;
+    private static final Map<String, DecoratorDriver> activeExtensions = new LinkedHashMap<>();
 
     @Override
     public void setup(Application application) {
@@ -36,20 +39,24 @@ public class ExtensionsFeature implements IFeature {
     }
 
     /**
-     * Add Tracking Logger extension checkbox to the Extensions menu.
-     * When enabled, inserts LoggingExtensionDriver at the top of the chain.
-     * When disabled, removes it from anywhere in the chain (linked-list removal).
+     * Registers a generic extension in the Extensions menu with a toggle checkbox.
+     * The factory receives the current driver and returns a new decorator wrapping it.
+     * Enabling inserts the decorator at the top of the chain; disabling removes it
+     * from anywhere in the chain (linked-list removal).
+     *
+     * @param name    Label shown in the Extensions menu.
+     * @param factory Constructor reference, e.g. {@code LoggingExtensionDriver::new}.
      */
-    public static void setupTrackingLoggerExtension() {
+    public static void addExtension(String name, Function<VisitableDriver, DecoratorDriver> factory) {
         app.addComponentMenuElementWithCheckBox(
                 ExtensionsFeature.class,
-                "Tracking Logger",
+                name,
                 (ActionEvent e) -> {
                     javax.swing.AbstractButton btn = (javax.swing.AbstractButton) e.getSource();
                     if (btn.isSelected()) {
-                        enableLogging();
+                        enableExtension(name, factory);
                     } else {
-                        disableLogging();
+                        disableExtension(name);
                     }
                     DriverFeature.updateDriverInfo();
                 },
@@ -80,33 +87,34 @@ public class ExtensionsFeature implements IFeature {
     }
 
     /**
-     * Inserts LoggingExtensionDriver at the top of the current driver chain.
+     * Inserts the extension decorator at the top of the current driver chain.
      */
-    private static void enableLogging() {
-        if (loggingDriver != null) {
+    private static void enableExtension(String name, Function<VisitableDriver, DecoratorDriver> factory) {
+        if (activeExtensions.containsKey(name)) {
             return;
         }
         VisitableDriver current = DriverFeature.getDriverManager().getCurrentDriver();
-        loggingDriver = new LoggingExtensionDriver(current);
-        DriverFeature.getDriverManager().setCurrentDriver(loggingDriver);
+        DecoratorDriver decorator = factory.apply(current);
+        activeExtensions.put(name, decorator);
+        DriverFeature.getDriverManager().setCurrentDriver(decorator);
     }
 
     /**
-     * Removes LoggingExtensionDriver from anywhere in the decorator chain,
+     * Removes the extension decorator from anywhere in the decorator chain,
      * connecting its predecessor directly to its successor (linked-list removal).
-     * Works correctly even for nested chains like: Recording -> Logging -> actual.
+     * Works correctly even when other extensions are nested around it.
      */
-    private static void disableLogging() {
-        if (loggingDriver == null) {
+    private static void disableExtension(String name) {
+        DecoratorDriver decorator = activeExtensions.remove(name);
+        if (decorator == null) {
             return;
         }
         VisitableDriver current = DriverFeature.getDriverManager().getCurrentDriver();
-        VisitableDriver newRoot = DriverChainUtils.removeFromChain(current, loggingDriver);
+        VisitableDriver newRoot = DriverChainUtils.removeFromChain(current, decorator);
         if (newRoot != current) {
             DriverFeature.getDriverManager().setCurrentDriver(newRoot);
         }
-        //If newRoot == current, logging was in the middle of the chain —
-        //predecessor's target was already updated by removeFromChain.
-        loggingDriver = null;
+        // If newRoot == current, the decorator was in the middle of the chain —
+        // its predecessor's target was already updated by removeFromChain.
     }
 }
