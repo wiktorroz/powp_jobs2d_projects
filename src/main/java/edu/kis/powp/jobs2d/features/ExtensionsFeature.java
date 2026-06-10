@@ -2,8 +2,8 @@ package edu.kis.powp.jobs2d.features;
 
 import edu.kis.powp.appbase.Application;
 import edu.kis.powp.jobs2d.drivers.DriverChainUtils;
-import edu.kis.powp.jobs2d.drivers.optional_drivers.DecoratorDriver;
-import edu.kis.powp.jobs2d.drivers.optional_drivers.RecordingDriver;
+import edu.kis.powp.jobs2d.drivers.optionals.DecoratorDriver;
+import edu.kis.powp.jobs2d.drivers.optionals.RecordingDriver;
 import edu.kis.powp.jobs2d.drivers.visitor.VisitableDriver;
 import edu.kis.powp.jobs2d.events.SelectClearRecordingOptionListener;
 import edu.kis.powp.jobs2d.events.SelectToggleRecordingOptionListener;

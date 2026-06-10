@@ -1,4 +1,4 @@
-package edu.kis.powp.jobs2d.drivers.optional_drivers;
+package edu.kis.powp.jobs2d.drivers.optionals;
 
 import edu.kis.powp.jobs2d.drivers.visitor.VisitableDriver;
 

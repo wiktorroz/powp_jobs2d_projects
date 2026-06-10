@@ -3,8 +3,8 @@ package edu.kis.powp.jobs2d.drivers.visitor;
 import edu.kis.powp.jobs2d.drivers.BoundsDriver;
 import edu.kis.powp.jobs2d.drivers.RealTimeDriver;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
-import edu.kis.powp.jobs2d.drivers.optional_drivers.AbstractDecoratorDriver;
-import edu.kis.powp.jobs2d.drivers.optional_drivers.TrackingLoggerDriver;
+import edu.kis.powp.jobs2d.drivers.optionals.AbstractDecoratorDriver;
+import edu.kis.powp.jobs2d.drivers.optionals.TrackingLoggerDriver;
 import edu.kis.powp.jobs2d.drivers.packet_composite.CompositeDriver;
 import edu.kis.powp.jobs2d.drivers.transformations.TransformingDriver;
 
