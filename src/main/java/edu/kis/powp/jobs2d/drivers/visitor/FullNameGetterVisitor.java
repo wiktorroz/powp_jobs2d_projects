@@ -1,13 +1,10 @@
 package edu.kis.powp.jobs2d.drivers.visitor;
 
 
-import edu.kis.powp.jobs2d.drivers.BoundsDriver;
-import edu.kis.powp.jobs2d.drivers.RealTimeDriver;
 import edu.kis.powp.jobs2d.drivers.adapter.LineDriverAdapter;
 import edu.kis.powp.jobs2d.drivers.optionals.AbstractDecoratorDriver;
 import edu.kis.powp.jobs2d.drivers.optionals.TrackingLoggerDriver;
 import edu.kis.powp.jobs2d.drivers.packet_composite.CompositeDriver;
-import edu.kis.powp.jobs2d.drivers.transformations.TransformingDriver;
 
 public class FullNameGetterVisitor implements DriverVisitor {
 
@@ -41,24 +38,6 @@ public class FullNameGetterVisitor implements DriverVisitor {
     public void visit(AbstractDecoratorDriver driver) {
         builder.append(driver.toString());
         driver.getTarget().accept(this);
-    }
-
-    @Override
-    public void visit(RealTimeDriver driver) {
-        builder.append(driver.toString());
-        driver.getInnerDriver().accept(this);
-    }
-
-    @Override
-    public void visit(TransformingDriver driver) {
-        builder.append(driver.toString());
-        driver.getInnerDriver().accept(this);
-    }
-
-    @Override
-    public void visit(BoundsDriver driver) {
-        builder.append(driver.toString());
-        driver.getInnerDriver().accept(this);
     }
 
     public String getAndResetFullName() {
